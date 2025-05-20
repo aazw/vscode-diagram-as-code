@@ -66,5 +66,12 @@
       "versioningTemplate": "loose",
       "allowedVersions": "/^v[^\\s]*\\./"
     }
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["github-tags"],
+      "matchPackageNames": ["plantuml/plantuml"],
+      "ignoreVersions": ["^snapshot", "^8059$", "^v?8059$"]
+    }
   ]
 }
