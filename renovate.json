@@ -55,22 +55,7 @@
       "datasourceTemplate": "npm",
       "depNameTemplate": "renovate",
       "versioningTemplate": "npm"
-    },
-    {
-      "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
-      "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+JAVA_PLANTUML_VERSION=(?<currentValue>\\S+)"],
-      "datasourceTemplate": "github-tags",
-      "depNameTemplate": "plantuml/plantuml",
-      "versioningTemplate": "loose"
     }
   ],
-  "packageRules": [
-    {
-      "matchDatasources": ["github-tags"],
-      "matchPackageNames": ["plantuml/plantuml"],
-      "ignoreVersions": ["^snapshot", "^8059$", "^v?8059$"]
-    }
-  ]
+  "packageRules": []
 }
