@@ -15,7 +15,7 @@ ARG NPM_PRETTIER_VERSION=3.5.3
 ARG NPM_RENOVATE_VERSION=40.14.4
 
 # for java tools
-ARG JAVA_PLANTUML_VERSION=1.2025.2
+ARG JAVA_PLANTUML_VERSION=8059
 
 # ##############################
 # builder images
