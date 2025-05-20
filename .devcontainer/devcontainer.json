@@ -9,6 +9,8 @@
   "workspaceFolder": "/workspace",
   "runServices": [
     // ここに改行入れておけばPrettierによって配列が1行にならない
+    "plantuml-server",
+    "mermaid-live-editor"
   ],
   "customizations": {
     "vscode": {
