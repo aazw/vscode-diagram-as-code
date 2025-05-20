@@ -64,7 +64,7 @@
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "plantuml/plantuml",
       "versioningTemplate": "loose",
-      "extractVersionTemplate": "{{#if (contains currentValue \".\")}}{{replace currentValue \"^v\" \"\"}}{{/if}}"
+      "allowedVersions": "/^v[^\\s]*\\./"
     }
   ]
 }
