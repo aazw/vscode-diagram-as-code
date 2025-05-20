@@ -1,0 +1,62 @@
+{
+  "name": "vsc-diagram-as-code",
+  "dockerComposeFile": [
+    // ここに改行入れておけばPrettierによって配列が1行にならない
+    "../compose.yaml",
+    "./compose.yaml"
+  ],
+  "service": "devcontainer",
+  "workspaceFolder": "/workspace",
+  "runServices": [
+    // ここに改行入れておけばPrettierによって配列が1行にならない
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "emeraldwalk.RunOnSave",
+        "ms-azuretools.vscode-containers",
+        "ms-azuretools.vscode-docker",
+        "esbenp.prettier-vscode",
+        "saoudrizwan.claude-dev"
+      ],
+      "settings": {
+        "editor.wordWrap": "off",
+        "diffEditor.wordWrap": "off",
+        "[markdown]": {
+          "editor.wordWrap": "off"
+        },
+        "[json][jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[yaml]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[dockercompose]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "emeraldwalk.runonsave": {
+          "commands": [
+            {
+              // Dcokerfileのフォーマット
+              "match": "\\bDockerfile$",
+              "cmd": "dockerfmt -w \"${file}\""
+            },
+            {
+              // シェルスクリプトのフォーマット
+              "match": "\\.sh$",
+              "cmd": "shfmt -w \"${file}\""
+            }
+          ]
+        }
+      }
+    }
+  },
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+  },
+  "shutdownAction": "stopCompose"
+}
