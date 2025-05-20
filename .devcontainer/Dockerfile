@@ -49,7 +49,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     gnupg \
     dirmngr \
-    openjdk-17-jre-headless \
     graphviz \
     libdbus-1-3 \
     libasound2t64 \
@@ -70,6 +69,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxrandr2 \
     libxshmfence1 \
     && rm -rf /var/lib/apt/lists/*
+
+# Install Java
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    openjdk-17-jre-headless
 
 # Create vscode user
 RUN useradd -m -s /bin/bash vscode
