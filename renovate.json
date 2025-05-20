@@ -63,7 +63,8 @@
       "matchStrings": ["ARG\\s+JAVA_PLANTUML_VERSION=(?<currentValue>\\S+)"],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "plantuml/plantuml",
-      "versioningTemplate": "semver-coerced"
+      "versioningTemplate": "loose",
+      "extractVersionTemplate": "{{#if (contains currentValue \".\")}}{{replace currentValue \"^v\" \"\"}}{{/if}}"
     }
   ]
 }
