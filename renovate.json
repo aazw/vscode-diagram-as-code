@@ -68,9 +68,8 @@
   ],
   "packageRules": [
     {
-      "matchDatasources": ["github-tags"],
       "matchPackageNames": ["plantuml/plantuml"],
-      "ignoreMatchStrings": ["snapshot", "snapshot-native", "v8059"]
+      "allowedVersions": "/^(?!.*(?:snapshot-native|snapshot|v8059)).*$/"
     }
   ]
 }
