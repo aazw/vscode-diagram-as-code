@@ -70,7 +70,7 @@
     {
       "matchDatasources": ["github-tags"],
       "matchPackageNames": ["plantuml/plantuml"],
-      "ignoreVersions": ["snapshot", "snapshot-native", "v8059"]
+      "ignoreMatchStrings": ["snapshot", "snapshot-native", "v8059"]
     }
   ]
 }
