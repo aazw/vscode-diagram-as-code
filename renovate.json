@@ -69,7 +69,7 @@
   "packageRules": [
     {
       "matchPackageNames": ["plantuml/plantuml"],
-      "allowedVersions": "/^(?!.*(?:snapshot-native|snapshot|v8059)).*$/"
+      "allowedVersions": "!/(?:snapshot-native|snapshot|v8059)/"
     }
   ]
 }
