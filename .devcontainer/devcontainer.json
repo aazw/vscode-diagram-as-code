@@ -12,6 +12,9 @@
     "plantuml-server",
     "mermaid-live-editor"
   ],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+  },
   "customizations": {
     "vscode": {
       "extensions": [
@@ -22,6 +25,7 @@
         "saoudrizwan.claude-dev"
       ],
       "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
         "editor.wordWrap": "off",
         "diffEditor.wordWrap": "off",
         "[markdown]": {
@@ -58,7 +62,8 @@
   },
   "remoteUser": "vscode",
   "remoteEnv": {
-    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}"
+    "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
+    "TZ": "Asia/Tokyo"
   },
   "shutdownAction": "stopCompose"
 }

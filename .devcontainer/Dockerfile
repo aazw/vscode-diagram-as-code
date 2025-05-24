@@ -1,5 +1,11 @@
 # for main image
-ARG DOCKER_IMAGE_UBUNTU_VERSION=24.04
+# debian version
+# 10 (Buster)
+# 11 (Bullseye)
+# 12 (Bookworm) **now**
+# 13 (Trixie)
+# 14 (Forky)
+ARG DOCKER_IMAGE_MAIN_VERSION=12.11
 
 # for builder images
 ARG DOCKER_GOLANG_VERSION=1.24
@@ -17,9 +23,9 @@ ARG NPM_RENOVATE_VERSION=40.26.1
 # for java tools
 ARG JAVA_PLANTUML_VERSION=1.2025.2
 
-# ##############################
+# ##########################################################################################
 # builder images
-# ##############################
+# ##########################################################################################
 
 # golang
 # https://hub.docker.com/_/golang
@@ -35,11 +41,11 @@ RUN go install github.com/reteps/dockerfmt@${GO_DOCKERFMT_VERSION}
 ARG GO_SHFMT_VERSION
 RUN go install mvdan.cc/sh/v3/cmd/shfmt@${GO_SHFMT_VERSION}
 
-# ##############################
+# ##########################################################################################
 # main image
-# ##############################
+# ##########################################################################################
 
-FROM ubuntu:${DOCKER_IMAGE_UBUNTU_VERSION}
+FROM debian:${DOCKER_IMAGE_MAIN_VERSION}
 
 # Install OS dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -51,7 +57,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     dirmngr \
     graphviz \
     libdbus-1-3 \
-    libasound2t64 \
+    libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
     libcups2 \
@@ -74,14 +80,25 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN apt-get update && apt-get install -y --no-install-recommends \
     openjdk-17-jre-headless
 
-# Create vscode user
-RUN useradd -m -s /bin/bash vscode
-
 # Install Node.js (LTS) via NodeSource
 RUN curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - \
     && apt-get update && apt-get install -y --no-install-recommends nodejs \
     && npm install -g yarn \
     && rm -rf /var/lib/apt/lists/*
+
+# add vscode user
+# https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user#_creating-a-nonroot-user
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get update \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL >/etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+USER $USERNAME
 
 # Switch to vscode user and install CLI tools via Yarn (so global bin is in /home/vscode/.yarn/bin)
 USER vscode
@@ -115,6 +132,12 @@ ENV PATH="${PATH}:/home/vscode/.yarn/bin"
 
 # sudo権限を付与
 RUN echo "vscode ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers
+
+# Arm環境のDocker内で(も)Puppeteerを動かせるようにする
+# https://zenn.dev/tom1111/articles/0dc7cde5c8e9bf
+RUN apt-get update -y && apt-get install -y chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # puppeteer-config.json with alias
 COPY ./puppeteer-config.json /home/vscode/puppeteer-config.json
