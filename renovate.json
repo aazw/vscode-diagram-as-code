@@ -74,6 +74,14 @@
     {
       "matchPackageNames": ["plantuml/plantuml"],
       "allowedVersions": "!/(?:snapshot-native|snapshot|v2017\\.11|v2017\\.09|v2017\\.08|v8059)/"
+    },
+    {
+      "matchPaths": [".devcontainer/**"],
+      "groupName": "devcontainer"
+    },
+    {
+      "matchPaths": ["compose.yaml"],
+      "groupName": "docker"
     }
   ]
 }
