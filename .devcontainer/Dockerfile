@@ -46,6 +46,7 @@ RUN go install mvdan.cc/sh/v3/cmd/shfmt@${GO_SHFMT_VERSION}
 # ##########################################################################################
 
 FROM debian:${DOCKER_IMAGE_MAIN_VERSION}
+ENV DEBIAN_FRONTEND=noninteractive
 
 # Install OS dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
