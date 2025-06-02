@@ -1,70 +1,105 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":configMigration"],
-  "labels": ["Renovate"],
+  "extends": [
+    "config:recommended",
+    ":configMigration"
+  ],
+  "labels": [
+    "Renovate"
+  ],
   "prHourlyLimit": 0,
   "prConcurrentLimit": 10,
-  "assignees": ["aazw"],
+  "assignees": [
+    "aazw"
+  ],
   "customManagers": [
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+GO_DOCKERFMT_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+GO_DOCKERFMT_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "go",
       "depNameTemplate": "github.com/reteps/dockerfmt",
       "versioningTemplate": "semver-coerced"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+GO_SHFMT_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+GO_SHFMT_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "go",
       "depNameTemplate": "mvdan.cc/sh/v3",
       "versioningTemplate": "semver-coerced"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+NPM_PUPPETEER_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+NPM_PUPPETEER_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "npm",
       "depNameTemplate": "puppeteer",
       "versioningTemplate": "npm"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+NPM_MERMAID_CLI_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+NPM_MERMAID_CLI_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "npm",
       "depNameTemplate": "@mermaid-js/mermaid-cli",
       "versioningTemplate": "npm"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+NPM_PRETTIER_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+NPM_PRETTIER_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "npm",
       "depNameTemplate": "prettier",
       "versioningTemplate": "npm"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+NPM_RENOVATE_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+NPM_RENOVATE_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "npm",
       "depNameTemplate": "renovate",
       "versioningTemplate": "npm"
     },
     {
       "customType": "regex",
-      "managerFilePatterns": ["/^\\.devcontainer\\/Dockerfile$/"],
+      "managerFilePatterns": [
+        "/^\\.devcontainer\\/Dockerfile$/"
+      ],
       "matchStringsStrategy": "any",
-      "matchStrings": ["ARG\\s+JAVA_PLANTUML_VERSION=(?<currentValue>\\S+)"],
+      "matchStrings": [
+        "ARG\\s+JAVA_PLANTUML_VERSION=(?<currentValue>\\S+)"
+      ],
       "datasourceTemplate": "github-tags",
       "depNameTemplate": "plantuml/plantuml",
       "versioningTemplate": "loose"
@@ -72,15 +107,21 @@
   ],
   "packageRules": [
     {
-      "matchPackageNames": ["plantuml/plantuml"],
+      "matchPackageNames": [
+        "plantuml/plantuml"
+      ],
       "allowedVersions": "!/(?:snapshot-native|snapshot|v2017\\.11|v2017\\.09|v2017\\.08|v8059)/"
     },
     {
-      "matchPaths": [".devcontainer/**"],
+      "matchFileNames": [
+        ".devcontainer/**"
+      ],
       "groupName": "devcontainer"
     },
     {
-      "matchPaths": ["compose.yaml"],
+      "matchFileNames": [
+        "compose.yaml"
+      ],
       "groupName": "docker"
     }
   ]
