@@ -76,11 +76,11 @@
       "allowedVersions": "!/(?:snapshot-native|snapshot|v2017\\.11|v2017\\.09|v2017\\.08|v8059)/"
     },
     {
-      "matchPaths": [".devcontainer/**"],
+      "matchFileNames": [".devcontainer/**"],
       "groupName": "devcontainer"
     },
     {
-      "matchPaths": ["compose.yaml"],
+      "matchFileNames": ["compose.yaml"],
       "groupName": "docker"
     }
   ]
