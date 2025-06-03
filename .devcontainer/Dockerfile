@@ -1,10 +1,11 @@
-# for main image
 # debian version
 # 10 (Buster)
 # 11 (Bullseye)
 # 12 (Bookworm) **now**
 # 13 (Trixie)
 # 14 (Forky)
+
+# for main image
 ARG DOCKER_IMAGE_MAIN_VERSION=12.11
 
 # for builder images
