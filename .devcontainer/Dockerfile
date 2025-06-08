@@ -14,6 +14,7 @@ ARG DOCKER_GOLANG_VERSION=1.24
 # for go install
 ARG GO_DOCKERFMT_VERSION=v0.3.7
 ARG GO_SHFMT_VERSION=v3.11.0
+ARG GO_GO_TASK_VERSION=v3.43.3
 
 # for npm tools
 ARG NPM_PUPPETEER_VERSION=24.10.0
@@ -41,6 +42,12 @@ RUN go install github.com/reteps/dockerfmt@${GO_DOCKERFMT_VERSION}
 # https://github.com/mvdan/sh
 ARG GO_SHFMT_VERSION
 RUN go install mvdan.cc/sh/v3/cmd/shfmt@${GO_SHFMT_VERSION}
+
+# go-task
+# https://github.com/go-task/task
+# https://taskfile.dev/
+ARG GO_GO_TASK_VERSION
+RUN go install github.com/go-task/task/v3/cmd/task@${GO_GO_TASK_VERSION}
 
 # ##########################################################################################
 # main image
@@ -152,6 +159,10 @@ COPY --from=golang-builder /go/bin/dockerfmt /usr/local/bin/
 # shfmt
 # refs above
 COPY --from=golang-builder /go/bin/shfmt /usr/local/bin/
+
+# go-task
+# refs above
+COPY --from=golang-builder /go/bin/task /usr/local/bin/
 
 # prettier
 # https://prettier.io/docs/install
