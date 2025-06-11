@@ -72,6 +72,13 @@
   ],
   "packageRules": [
     {
+      "enabled": false,
+      "matchManagers": ["custom.regex"],
+      "matchDatasources": ["npm"],
+      "matchDepNames": ["renovate"],
+      "matchUpdateTypes": ["patch"]
+    },
+    {
       "matchPackageNames": ["plantuml/plantuml"],
       "allowedVersions": "!/(?:snapshot-native|snapshot|v2017\\.11|v2017\\.09|v2017\\.08|v8059)/"
     },
