@@ -1,14 +1,14 @@
 services:
-  # https://hub.docker.com/r/plantuml/plantuml-server
   # https://github.com/plantuml/plantuml-server
+  # https://hub.docker.com/r/plantuml/plantuml-server
   plantuml-server:
     platform: linux/amd64
     image: plantuml/plantuml-server:jetty-v1.2025.2
     ports:
       - 48080:8080
 
-  # https://github.com/mermaid-js/mermaid-live-editor/pkgs/container/mermaid-live-editor
   # https://github.com/mermaid-js/mermaid-live-editor
+  # https://github.com/mermaid-js/mermaid-live-editor/pkgs/container/mermaid-live-editor
   mermaid-live-editor:
     platform: linux/amd64
     # no versioning
