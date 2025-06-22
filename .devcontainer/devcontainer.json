@@ -20,8 +20,7 @@
       "extensions": [
         "emeraldwalk.RunOnSave",
         "ms-azuretools.vscode-containers",
-        "ms-azuretools.vscode-docker",
-        "saoudrizwan.claude-dev"
+        "ms-azuretools.vscode-docker"
       ],
       "settings": {
         "terminal.integrated.defaultProfile.linux": "bash"

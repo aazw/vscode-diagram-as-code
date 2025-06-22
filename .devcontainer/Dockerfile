@@ -9,10 +9,10 @@
 ARG DOCKER_DEBIAN_VERSION=12.11
 
 # for builder images
-ARG DOCKER_GOLANG_VERSION=1.24
+ARG DOCKER_GO_VERSION=1.24.4-bookworm
 ARG DOCKER_NODE_VERSION=22.16.0-bookworm
-ARG DOCKER_JQ_VERSION=1.8.0
-ARG DOCKER_YQ_VERSION=4.45.4
+ARG DOCKER_PYTHON_VERSION=3.13.5-bookworm
+ARG DOCKER_JAVA_VERSION=17-jdk-jammy
 
 # for go install
 ARG GO_DOCKERFMT_VERSION=v0.3.7
@@ -20,13 +20,23 @@ ARG GO_SHFMT_VERSION=v3.11.0
 ARG GO_GO_TASK_VERSION=v3.43.3
 
 # for npm tools
+ARG NPM_NPM_VERSION=11.4.2
+ARG NPM_PRETTIER_VERSION=3.5.3
+ARG NPM_RENOVATE_VERSION=41.1.3
+ARG NPM_CLAUDE_CODE_VERSION=1.0.31
+ARG NPM_CCUSAGE_VERSION=15.1.0
 ARG NPM_PUPPETEER_VERSION=24.10.0
 ARG NPM_MERMAID_CLI_VERSION=11.4.3
-ARG NPM_PRETTIER_VERSION=3.5.3
-ARG NPM_RENOVATE_VERSION=40.51.0
 
 # for java tools
 ARG JAVA_PLANTUML_VERSION=1.2025.3
+
+# for other tools (github-tags)
+ARG OTHER_JQ_VERSION=1.8.0
+ARG OTHER_YQ_VERSION=4.45.4
+ARG OTHER_XQ_VERSION=1.3.0
+ARG OTHER_TAPLO_VERSION=0.10.0
+ARG OTHER_SHELLCHECK_VERSION=v0.10.0
 
 # ##########################################################################################
 # builder images
@@ -34,7 +44,7 @@ ARG JAVA_PLANTUML_VERSION=1.2025.3
 
 # golang
 # https://hub.docker.com/_/golang
-FROM golang:${DOCKER_GOLANG_VERSION} AS golang-builder
+FROM golang:${DOCKER_GO_VERSION} AS golang-builder
 
 # dockerfmt
 # https://github.com/reteps/dockerfmt
@@ -57,20 +67,24 @@ RUN go install github.com/go-task/task/v3/cmd/task@${GO_GO_TASK_VERSION}
 # https://note.milldea.com/posts/two-ways-to-install-nodejs-with-fixed-version-in-dockerfile
 FROM node:${DOCKER_NODE_VERSION} AS node-builder
 
-# jq
-# https://github.com/mikefarah/yq
-# https://github.com/jqlang/jq
-FROM ghcr.io/jqlang/jq:${DOCKER_JQ_VERSION} AS jq-builder
-
-# yq
-# https://github.com/mikefarah/yq
-# https://hub.docker.com/r/mikefarah/yq
-FROM mikefarah/yq:${DOCKER_YQ_VERSION} AS yq-builder
+# java
+# https://hub.docker.com/_/eclipse-temurin
+# https://adoptium.net/temurin/
+FROM eclipse-temurin:${DOCKER_JAVA_VERSION} AS java-builder
+ENV JAVA_HOME=/opt/java/openjdk
+RUN apt-get update && apt-get install -y --no-install-recommends binutils \
+    && rm -rf /var/lib/apt/lists/*
+RUN $JAVA_HOME/bin/jlink \
+    --add-modules java.base,java.logging,java.desktop,java.xml,java.datatransfer \
+    --strip-debug --no-man-pages --no-header-files --compress=2 \
+    --output /javaruntime
 
 # ##########################################################################################
 # main image
 # ##########################################################################################
 
+# debian
+# https://hub.docker.com/_/debian/
 FROM debian:${DOCKER_DEBIAN_VERSION}
 ENV DEBIAN_FRONTEND=noninteractive
 ENV DEBCONF_NOWARNINGS=yes
@@ -83,6 +97,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     nano \
     less \
+    gzip \
+    tar \
+    zip \
+    unzip \
+    xz-utils \
+    locales-all \
     gnupg \
     dirmngr \
     graphviz \
@@ -125,30 +145,141 @@ COPY --from=node-builder /usr/local/lib/node_modules /usr/local/lib/node_modules
 RUN ln -s /usr/local/bin/node /usr/local/bin/nodejs \
     && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
     && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npx
-RUN npm install -g yarn
 
-# jq
+# java
 # refs above
-COPY --from=jq-builder /jq /usr/local/bin/
+ENV JAVA_HOME=/opt/java/openjdk
+ENV PATH="$JAVA_HOME/bin:$PATH"
+COPY --from=java-builder /javaruntime $JAVA_HOME
 
-# yq
-# refs above
-COPY --from=yq-builder /usr/bin/yq /usr/local/bin/
+# npm
+# https://github.com/npm/cli
+# https://www.npmjs.com/package/npm
+ARG NPM_NPM_VERSION
+RUN npm install -g npm@${NPM_NPM_VERSION}
 
 # prettier
 # https://prettier.io/docs/install
 ARG NPM_PRETTIER_VERSION
-RUN yarn global add prettier@${NPM_PRETTIER_VERSION}
+RUN npm install -g prettier@${NPM_PRETTIER_VERSION}
 
 # renovate
 # https://github.com/renovatebot/renovate
 # https://www.npmjs.com/package/renovate
 ARG NPM_RENOVATE_VERSION
-RUN yarn global add renovate@${NPM_RENOVATE_VERSION}
+RUN npm install -g renovate@${NPM_RENOVATE_VERSION}
 
-# Install Java
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    openjdk-17-jre-headless
+# claude-code
+# https://github.com/anthropics/claude-code
+# https://github.com/anthropics/claude-code/blob/main/.devcontainer/devcontainer.json
+# https://github.com/anthropics/claude-code/blob/main/.devcontainer/Dockerfile
+# https://github.com/anthropics/claude-code/blob/main/.devcontainer/init-firewall.sh
+RUN apt-get update -y && apt-get install -y \
+    less \
+    git \
+    procps \
+    sudo \
+    fzf \
+    zsh \
+    man-db \
+    unzip \
+    gnupg2 \
+    gh \
+    iptables \
+    ipset \
+    iproute2 \
+    dnsutils \
+    aggregate
+ARG NPM_CLAUDE_CODE_VERSION
+RUN npm install -g @anthropic-ai/claude-code@${NPM_CLAUDE_CODE_VERSION}
+ENV DEVCONTAINER=true
+
+## ccusage
+# https://github.com/ryoppippi/ccusage
+# https://www.npmjs.com/package/ccusage
+ARG NPM_CCUSAGE_VERSION
+RUN npm install -g ccusage@${NPM_CCUSAGE_VERSION}
+
+# puppeteer
+# https://github.com/puppeteer/puppeteer
+# https://www.npmjs.com/package/puppeteer
+ARG NPM_PUPPETEER_VERSION
+RUN npm install -g puppeteer@${NPM_PUPPETEER_VERSION}
+
+# mermaid
+# https://github.com/mermaid-js/mermaid-cli
+ARG NPM_MERMAID_CLI_VERSION
+RUN npm install -g @mermaid-js/mermaid-cli@${NPM_MERMAID_CLI_VERSION}
+
+# jq
+# https://github.com/jqlang/jq
+ARG OTHER_JQ_VERSION
+RUN curl -fsSL -o /jq https://github.com/jqlang/jq/releases/download/jq-${OTHER_JQ_VERSION}/jq-linux-$(uname -m | sed 's/aarch64/arm64/' | sed 's/x86_64/amd64/') \
+    && chmod +x /jq \
+    && mv /jq /usr/local/bin/ \
+    && jq --version
+
+# yq
+# https://github.com/mikefarah/yq
+# https://hub.docker.com/r/mikefarah/yq
+ARG OTHER_YQ_VERSION
+RUN curl -fsSL -o /yq https://github.com/mikefarah/yq/releases/download/v${OTHER_YQ_VERSION}/yq_linux_$(uname -m | sed 's/aarch64/arm64/' | sed 's/x86_64/amd64/') \
+    && chmod +x /yq \
+    && mv /yq /usr/local/bin/ \
+    && yq --version
+
+# xq
+# https://github.com/sibprogrammer/xq
+ARG OTHER_XQ_VERSION
+RUN curl -fsSL -o /xq.tar.gz https://github.com/sibprogrammer/xq/releases/download/v${OTHER_XQ_VERSION}/xq_${OTHER_XQ_VERSION}_linux_$(uname -m | sed 's/aarch64/arm64/' | sed 's/x86_64/amd64/').tar.gz \
+    && mkdir -p /xq \
+    && tar -xvzf /xq.tar.gz -C /xq/ \
+    && chmod +x /xq/xq \
+    && mv /xq/xq /usr/local/bin/ \
+    && rm /xq.tar.gz \
+    && rm -rf /xq \
+    && xq --version
+
+# taplo
+# https://github.com/tamasfe/taplo
+# https://taplo.tamasfe.dev/
+# https://hub.docker.com/r/tamasfe/taplo
+ARG OTHER_TAPLO_VERSION
+RUN curl -fsSL -o /taplo.gz https://github.com/tamasfe/taplo/releases/download/${OTHER_TAPLO_VERSION}/taplo-linux-$(uname -m | sed 's/arm64/aarch64/' | sed 's/amd64/x86_64/').gz \
+    && gzip -d /taplo.gz \
+    && chmod +x /taplo \
+    && mv /taplo /usr/local/bin/ \
+    && taplo --version
+
+# shellcheck
+# https://github.com/koalaman/shellcheck
+# https://hub.docker.com/r/koalaman/shellcheck
+ARG OTHER_SHELLCHECK_VERSION
+RUN curl -fsSL -o /shellcheck.tar.xz https://github.com/koalaman/shellcheck/releases/download/${OTHER_SHELLCHECK_VERSION}/shellcheck-${OTHER_SHELLCHECK_VERSION}.linux.$(uname -m | sed 's/arm64/aarch64/' | sed 's/amd64/x86_64/').tar.xz \
+    && tar -xvf /shellcheck.tar.xz -C / \
+    && chmod +x /shellcheck-${OTHER_SHELLCHECK_VERSION}/shellcheck \
+    && mv /shellcheck-${OTHER_SHELLCHECK_VERSION}/shellcheck /usr/local/bin/ \
+    && rm /shellcheck.tar.xz \
+    && rm -rf /shellcheck-${OTHER_SHELLCHECK_VERSION} \
+    && shellcheck --version
+
+# plantuml
+# https://github.com/plantuml/plantuml
+# https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+# https://github.com/plantuml/plantuml/releases/download/v1.2025.2/plantuml-1.2025.2.jar
+ARG JAVA_PLANTUML_VERSION
+RUN curl -L -o /usr/local/bin/plantuml.jar \
+    https://github.com/plantuml/plantuml/releases/download/v${JAVA_PLANTUML_VERSION}/plantuml-${JAVA_PLANTUML_VERSION}.jar \
+    && chmod +x /usr/local/bin/plantuml.jar \
+    && printf '#!/bin/bash\nexec java -Djava.awt.headless=true -jar /usr/local/bin/plantuml.jar "$@"\n' \
+        >/usr/local/bin/plantuml \
+    && chmod +x /usr/local/bin/plantuml
+
+# Arm環境のDocker内で(も)Puppeteerを動かせるようにする
+# https://zenn.dev/tom1111/articles/0dc7cde5c8e9bf
+RUN apt-get update -y && apt-get install -y chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
 # add vscode user
 # https://code.visualstudio.com/remote/advancedcontainers/add-nonroot-user#_creating-a-nonroot-user
@@ -162,51 +293,10 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL >/etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
-USER $USERNAME
 
-# Switch to vscode user and install CLI tools via Yarn (so global bin is in /home/vscode/.yarn/bin)
-USER vscode
-WORKDIR /home/vscode
-
-# Install Mermaid CLI and Puppeteer globally
-# https://github.com/puppeteer/puppeteer
-# https://www.npmjs.com/package/puppeteer
-# https://github.com/mermaid-js/mermaid-cli
-ARG NPM_PUPPETEER_VERSION
-ARG NPM_MERMAID_CLI_VERSION
-RUN yarn global add puppeteer@${NPM_PUPPETEER_VERSION} @mermaid-js/mermaid-cli@${NPM_MERMAID_CLI_VERSION}
-
-# Switch back to root to install plantuml.jar
-USER root
-
-# Install PlantUML
-# https://github.com/plantuml/plantuml
-# https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
-# https://github.com/plantuml/plantuml/releases/download/v1.2025.2/plantuml-1.2025.2.jar
-ARG JAVA_PLANTUML_VERSION
-RUN curl -L -o /usr/local/bin/plantuml.jar \
-    https://github.com/plantuml/plantuml/releases/download/v${JAVA_PLANTUML_VERSION}/plantuml-${JAVA_PLANTUML_VERSION}.jar \
-    && chmod +x /usr/local/bin/plantuml.jar \
-    && printf '#!/bin/bash\nexec java -Djava.awt.headless=true -jar /usr/local/bin/plantuml.jar "$@"\n' \
-        >/usr/local/bin/plantuml \
-    && chmod +x /usr/local/bin/plantuml
-
-# Ensure Yarn global bin is on PATH
-ENV PATH="${PATH}:/home/vscode/.yarn/bin"
-
-# sudo権限を付与
 RUN echo "vscode ALL=(ALL) NOPASSWD:ALL" >>/etc/sudoers
-
-# Arm環境のDocker内で(も)Puppeteerを動かせるようにする
-# https://zenn.dev/tom1111/articles/0dc7cde5c8e9bf
-RUN apt-get update -y && apt-get install -y chromium
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+USER $USERNAME
 
 # puppeteer-config.json with alias
 COPY ./puppeteer-config.json /home/vscode/puppeteer-config.json
 RUN echo "alias mmdc='mmdc --puppeteerConfigFile /home/vscode/puppeteer-config.json'" >>/home/vscode/.bashrc
-
-# デフォルトユーザー
-USER vscode
-WORKDIR /workspace

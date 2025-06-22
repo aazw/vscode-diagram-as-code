@@ -2,7 +2,6 @@
   "recommendations": [
     "emeraldwalk.RunOnSave",
     "ms-azuretools.vscode-containers",
-    "ms-azuretools.vscode-docker",
-    "saoudrizwan.claude-dev"
+    "ms-azuretools.vscode-docker"
   ]
 }
