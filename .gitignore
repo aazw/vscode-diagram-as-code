@@ -241,3 +241,9 @@ core.*
 # Claude Code data (keep settings.json, ignore session data)
 .claude/*
 !.claude/settings.json
+
+# Ingore test files
+samples/**/*
+!samples/**/*.md
+!samples/**/*.puml
+!samples/**/*.mmd
