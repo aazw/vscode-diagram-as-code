@@ -1,4 +1,6 @@
+name: diagram-as-code
 services:
+  # plantuml-server
   # https://github.com/plantuml/plantuml-server
   # https://hub.docker.com/r/plantuml/plantuml-server
   plantuml-server:
@@ -7,6 +9,7 @@ services:
     ports:
       - 48080:8080
 
+  # mermaid
   # https://github.com/mermaid-js/mermaid-live-editor
   # https://github.com/mermaid-js/mermaid-live-editor/pkgs/container/mermaid-live-editor
   mermaid-live-editor:
@@ -15,3 +18,13 @@ services:
     image: ghcr.io/mermaid-js/mermaid-live-editor@sha256:65a2c779f817ccffe8b69d2fa80d73fee3077da97f3d0a9b39d52d020fa8deba
     ports:
       - 48081:8080
+
+  # kroki
+  # https://github.com/yuzutech/kroki
+  # https://docs.kroki.io/kroki/setup/install/#images
+  # https://hub.docker.com/r/yuzutech/kroki
+  kroki:
+    platform: linux/amd64
+    image: yuzutech/kroki:0.28.0
+    ports:
+      - 48082:8000
