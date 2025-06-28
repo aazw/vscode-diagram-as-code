@@ -9,7 +9,7 @@
 ARG DOCKER_DEBIAN_VERSION=12.11
 
 # for builder images
-ARG DOCKER_GO_VERSION=1.24.4-bookworm
+ARG DOCKER_GOLANG_VERSION=1.24.4-bookworm
 ARG DOCKER_NODE_VERSION=22.17.0-bookworm
 ARG DOCKER_PYTHON_VERSION=3.13.5-bookworm
 ARG DOCKER_JAVA_VERSION=21.0.7_6-jdk-jammy
@@ -45,7 +45,7 @@ ARG OTHER_RIPGREP_VERSION=14.1.1
 
 # golang
 # https://hub.docker.com/_/golang
-FROM golang:${DOCKER_GO_VERSION} AS golang-builder
+FROM golang:${DOCKER_GOLANG_VERSION} AS golang-builder
 
 # dockerfmt
 # https://github.com/reteps/dockerfmt
