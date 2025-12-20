@@ -15,7 +15,7 @@ services:
   mermaid-live-editor:
     platform: linux/amd64
     # no versioning
-    image: ghcr.io/mermaid-js/mermaid-live-editor@sha256:65a2c779f817ccffe8b69d2fa80d73fee3077da97f3d0a9b39d52d020fa8deba
+    image: ghcr.io/mermaid-js/mermaid-live-editor@sha256:396e4a1d5913cd906dc59e59d83c0eb322a5dd2aa2f5763af664a01bfe0bcf92
     ports:
       - 48081:8080
 
@@ -25,6 +25,6 @@ services:
   # https://hub.docker.com/r/yuzutech/kroki
   kroki:
     platform: linux/amd64
-    image: yuzutech/kroki:0.28.0
+    image: yuzutech/kroki:0.29.1
     ports:
       - 48082:8000
