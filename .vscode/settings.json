@@ -2,7 +2,6 @@
   "files.associations": {
     "devbox.json": "jsonc"
   },
-  "[jsonc]": {},
   "editor.wordWrap": "off",
   "[markdown]": {
     "editor.wordWrap": "off"
