@@ -242,6 +242,9 @@ core.*
 .claude/*
 !.claude/settings.json
 
+# Devbox
+.devbox
+
 # Ingore test files
 samples/**/*
 !samples/**/*.md

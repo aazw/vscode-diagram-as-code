@@ -13,14 +13,21 @@
     "mermaid-live-editor"
   ],
   "features": {
-    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+    "ghcr.io/devcontainers/features/docker-outside-of-docker:1": {
+      "version": "latest",
+      "enableNonRootDocker": "true",
+      "moby": "true"
+    }
   },
   "customizations": {
     "vscode": {
       "extensions": [
-        "emeraldwalk.RunOnSave",
+        "emeraldwalk.runonsave",
         "ms-azuretools.vscode-containers",
         "ms-azuretools.vscode-docker",
+        "tamasfe.even-better-toml",
+        "anthropic.claude-code",
+        "openai.chatgpt",
         "shd101wyy.markdown-preview-enhanced",
         "jebbs.plantuml",
         "mermaidchart.vscode-mermaid-chart"
@@ -38,10 +45,12 @@
       }
     }
   },
+  "containerUser": "root", // コンテナ起動時・初期化処理のユーザ. docker psできるようにするために必要
   "remoteUser": "vscode",
   "remoteEnv": {
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
-    "TZ": "Asia/Tokyo"
+    "TZ": "Asia/Tokyo",
+    "TASK_X_ENV_PRECEDENCE": "1",
   },
   "shutdownAction": "stopCompose"
 }

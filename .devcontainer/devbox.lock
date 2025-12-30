@@ -1,0 +1,57 @@
+{
+  "lockfile_version": "1",
+  "packages": {
+    "github:NixOS/nixpkgs/nixpkgs-unstable": {
+      "last_modified": "2025-12-29T08:23:14Z",
+      "resolved": "github:NixOS/nixpkgs/0744ef1b047f07d31d9962d757ffe38ec14a4d41?lastModified=1766996594&narHash=sha256-SosfgQSqVmOkqVgNYJnxW5FvoIQX4grOcpIKNrIwz4o%3D"
+    },
+    "plantuml@1.2025.10": {
+      "last_modified": "2025-11-23T21:50:36Z",
+      "resolved": "github:NixOS/nixpkgs/ee09932cedcef15aaf476f9343d1dea2cb77e261#plantuml",
+      "source": "devbox-search",
+      "version": "1.2025.10",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/3n8wczsqv5bwpjkz9ngd5vayy4zf28ha-plantuml-1.2025.10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/3n8wczsqv5bwpjkz9ngd5vayy4zf28ha-plantuml-1.2025.10"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/y2prvky505pn0vyryjaqc0knih4s027v-plantuml-1.2025.10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/y2prvky505pn0vyryjaqc0knih4s027v-plantuml-1.2025.10"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/hmg6r8lpvvm6q0yi460fw67d3n4ya20w-plantuml-1.2025.10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/hmg6r8lpvvm6q0yi460fw67d3n4ya20w-plantuml-1.2025.10"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/wn4bhvjrq5r7id67gr6rn24xs0cf48z1-plantuml-1.2025.10",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/wn4bhvjrq5r7id67gr6rn24xs0cf48z1-plantuml-1.2025.10"
+        }
+      }
+    }
+  }
+}
