@@ -1,12 +1,11 @@
 {
-  "name": "vsc-diagram-as-code",
+  "name": "vsc-diagram-as-code-${localWorkspaceFolderBasename}-${devcontainerId}",
   "dockerComposeFile": [
     // ここに改行入れておけばPrettierによって配列が1行にならない
     "../compose.yaml",
     "./compose.yaml"
   ],
   "service": "devcontainer",
-  "workspaceFolder": "/workspace",
   "runServices": [
     // ここに改行入れておけばPrettierによって配列が1行にならない
     "plantuml-server",
@@ -45,12 +44,16 @@
       }
     }
   },
+  // "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces,type=bind,consistency=cached",
+  // "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "workspaceFolder": "/workspace",
   "containerUser": "root", // コンテナ起動時・初期化処理のユーザ. docker psできるようにするために必要
   "remoteUser": "vscode",
   "remoteEnv": {
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",
     "TZ": "Asia/Tokyo",
-    "TASK_X_ENV_PRECEDENCE": "1",
+    "TASK_X_ENV_PRECEDENCE": "1"
   },
+  "postAttachCommand": "task init",
   "shutdownAction": "stopCompose"
 }
