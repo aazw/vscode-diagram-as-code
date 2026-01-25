@@ -45,8 +45,7 @@
     }
   },
   // "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces,type=bind,consistency=cached",
-  // "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "workspaceFolder": "/workspace",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
   "containerUser": "root", // コンテナ起動時・初期化処理のユーザ. docker psできるようにするために必要
   "remoteUser": "vscode",
   "remoteEnv": {
