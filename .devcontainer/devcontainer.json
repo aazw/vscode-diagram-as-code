@@ -5,6 +5,7 @@
     "../compose.yaml",
     "./compose.yaml"
   ],
+  "initializeCommand": "bash -lc 'mkdir -p \"${localWorkspaceFolder}/.devcontainer/.state/claude\" \"${localWorkspaceFolder}/.devcontainer/.state/codex\"'",
   "service": "devcontainer",
   "runServices": [
     // ここに改行入れておけばPrettierによって配列が1行にならない
@@ -27,8 +28,11 @@
         "tamasfe.even-better-toml",
         "anthropic.claude-code",
         "openai.chatgpt",
+        // Markdown
         "shd101wyy.markdown-preview-enhanced",
+        // PlantUML
         "jebbs.plantuml",
+        // Mermaid
         "mermaidchart.vscode-mermaid-chart"
       ],
       "settings": {
@@ -46,7 +50,8 @@
   },
   // "workspaceMount": "source=${localWorkspaceFolder}/..,target=/workspaces,type=bind,consistency=cached",
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
-  "containerUser": "root", // コンテナ起動時・初期化処理のユーザ. docker psできるようにするために必要
+  // コンテナ起動時・初期化処理のユーザ. docker psできるようにするために必要
+  "containerUser": "root",
   "remoteUser": "vscode",
   "remoteEnv": {
     "LOCAL_WORKSPACE_FOLDER": "${localWorkspaceFolder}",

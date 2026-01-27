@@ -5,23 +5,27 @@
 * Mermaid
   
   * Mermeid CLI
+
     ```bash
     mmdc -i samples/mermaid/001.mmd
     ```
+
   * Mermaid Live Editor
 
-    http://localhost:48081
+    <http://localhost:48081>
 
-  * VSCode Preview    
+  * VSCode Preview
 
 * PlantUML
 
   * CLI
+
     ```bash
     plantuml samples/plantuml/001.puml
     ```
+
   * PlantUML Server
-    
-    http://localhost:48080
-    
+
+    <http://localhost:48080>
+
   * VSCode Preview
