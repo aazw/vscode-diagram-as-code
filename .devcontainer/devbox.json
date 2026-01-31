@@ -2,6 +2,6 @@
   "$schema": "https://raw.githubusercontent.com/jetify-com/devbox/0.16.0/.schema/devbox.schema.json",
   "packages": [
     //
-    "plantuml@1.2025.10"
+    "plantuml@1.2026.1"
   ]
 }
