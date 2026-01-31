@@ -3,11 +3,9 @@ services:
     container_name: vsc-diagram-as-code
     build:
       context: ./.devcontainer
-    working_dir: /workspaces
     tty: true
+    working_dir: /workspaces
     volumes:
       - ${LOCAL_WORKSPACE_FOLDER:-.}/..:/workspaces:cached
-      - ${LOCAL_WORKSPACE_FOLDER:-.}/.devcontainer/.state/claude:/home/vscode/.claude
-      - ${LOCAL_WORKSPACE_FOLDER:-.}/.devcontainer/.state/codex:/home/vscode/.codex
     extra_hosts:
       - "host.docker.internal:host-gateway"
