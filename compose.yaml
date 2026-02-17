@@ -15,7 +15,7 @@ services:
   mermaid-live-editor:
     platform: linux/amd64
     # no versioning
-    image: ghcr.io/mermaid-js/mermaid-live-editor@sha256:396e4a1d5913cd906dc59e59d83c0eb322a5dd2aa2f5763af664a01bfe0bcf92
+    image: ghcr.io/mermaid-js/mermaid-live-editor@sha256:39604ae9e5900b929e19239e45e9a5f691d72732be629ae88e797bda6f7502fb
     ports:
       - 48081:8080
 
